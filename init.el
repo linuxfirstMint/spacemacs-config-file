@@ -555,12 +555,12 @@ before packages are loaded."
         browse-url-generic-program "/usr/bin/firefox")
 
   ;hie-wrapper使用の設定
-  (setq lsp-haskell-process-path-hie "hie-wrapper")
+  ;(setq lsp-haskell-process-path-hie "hie-wrapper")
   ;(require 'lsp-haskell)
   ;(add-hook 'haskell-mode-hook #'lsp)
 
-  (add-to-list 'load-path "~/.emacs.d/elisp/lsp-ui")
-  (add-to-list 'load-path "~/.emacs.d/elisp/lsp-haskell")
+  ;(add-to-list 'load-path "~/.emacs.d/elisp/lsp-ui")
+  ;(add-to-list 'load-path "~/.emacs.d/elisp/lsp-haskell")
 
   ;(require 'lsp-mode)
   ;(use-package lsp-mode
