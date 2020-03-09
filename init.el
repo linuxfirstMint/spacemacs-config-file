@@ -59,7 +59,7 @@ This function should only modify configuration layer settings."
              colors-colorize-identifiers 'all
              colors-default-rainbow-identifiers-sat 42
              colors-default-rainbow-identifiers-light 86)
-     (haskell :variables haskell-completion-backend 'lsp)
+     ;(haskell :variables haskell-completion-backend 'lsp)
      ;(haskell :variables ; Or optionally just haskell without the variables.
      ;         haskell-completion-backend 'ghci
      ;         haskell-process-type 'stack-ghci)
@@ -89,9 +89,9 @@ This function should only modify configuration layer settings."
                                         :custom
                                         (all-the-icons-scale-factor 1.0))
 
-                                      (use-package lsp-haskell
-                                        :location
-                                        (recipe :fetcher github :repo "emacs-lsp/lsp-haskell"))
+                                      ;(use-package lsp-haskell
+                                      ;  :location
+                                      ;  (recipe :fetcher github :repo "emacs-lsp/lsp-haskell"))
                                       )
 
    ; A list of packages that cannot be updated.
@@ -555,12 +555,12 @@ before packages are loaded."
         browse-url-generic-program "/usr/bin/firefox")
 
   ;hie-wrapper使用の設定
-  (setq lsp-haskell-process-path-hie "hie-wrapper")
+  ;(setq lsp-haskell-process-path-hie "hie-wrapper")
   ;(require 'lsp-haskell)
   ;(add-hook 'haskell-mode-hook #'lsp)
 
-  (add-to-list 'load-path "~/.emacs.d/elisp/lsp-ui")
-  (add-to-list 'load-path "~/.emacs.d/elisp/lsp-haskell")
+  ;(add-to-list 'load-path "~/.emacs.d/elisp/lsp-ui")
+  ;(add-to-list 'load-path "~/.emacs.d/elisp/lsp-haskell")
 
   ;(require 'lsp-mode)
   ;(use-package lsp-mode
