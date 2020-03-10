@@ -88,7 +88,6 @@ This function should only modify configuration layer settings."
                                       (use-package all-the-icons
                                         :custom
                                         (all-the-icons-scale-factor 1.0))
-
                                       (use-package lsp-haskell
                                         :location
                                         (recipe :fetcher github :repo "emacs-lsp/lsp-haskell"))
@@ -677,7 +676,31 @@ before packages are loaded."
   (add-to-list 'load-path "~/.emacs.d/elisp/Buffer-menu-color")
   (require 'buffer-menu-color)
 
-  
+  ;;スペルチェックにaspellを使う
+  (setq-default ispell-program-name "aspell")
+  ;日本語混じりでもスペルチェック可能にする
+  (eval-after-load "ispell"
+    '(add-to-list 'ispell-skip-region-alist '("[^\000-\377]+")))
+  (global-set-key (kbd "C-M-$") 'ispell-complete-word)
+
+  ;スペルチェックのフック
+  (mapc
+   (lambda (hook)
+     (add-hook hook 'flyspell-prog-mode))
+   '(
+     c-mode-common-hook
+     emacs-lisp-mode-hook
+     ))
+  (mapc
+   (lambda (hook)
+     (add-hook hook
+               '(lambda () (flyspell-mode 1))))
+   '(
+     ;フック対象のモード
+     ;yatex-mode-hook
+     org-mode
+     ))
+
   )
 
 (custom-set-variables
@@ -731,7 +754,7 @@ This function is called at the very end of Spacemacs initialization."
      ("\\?\\?\\?+" . "#dc752f"))))
  '(package-selected-packages
    (quote
-    (evil-easymotion doom-themes all-the-icons-ivy mozc-popup mozc-im mozc helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-ls-git helm-flx helm-descbinds helm-ag ace-jump-helm-line helm helm-core yasnippet-snippets xterm-color ws-butler writeroom-mode winum which-key wgrep web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-persp treemacs-magit treemacs-evil toc-org terminal-here tagedit symon symbol-overlay string-inflection spaceline-all-the-icons smex smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs request rainbow-delimiters pug-mode prettier-js popwin pcre2el password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-cliplink org-bullets org-brain open-junk-file nameless multi-term move-text mmm-mode markdown-toc magit-svn magit-section magit-gitflow macrostep lsp-ui lsp-treemacs lorem-ipsum link-hint ivy-yasnippet ivy-xref ivy-purpose ivy-hydra indent-guide impatient-mode hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-make google-translate golden-ratio gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline diminish devdocs define-word counsel-projectile counsel-css company-web company-statistics company-quickhelp company-lsp column-enforce-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-compile ample-zen-theme all-the-icons-dired aggressive-indent ace-link ac-ispell)))
+    (treemacs pfuture doom-themes all-the-icons-ivy mozc-popup mozc-im mozc helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-ls-git helm-flx helm-descbinds helm-ag ace-jump-helm-line helm helm-core yasnippet-snippets xterm-color ws-butler writeroom-mode winum which-key wgrep web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-persp treemacs-magit treemacs-evil toc-org terminal-here tagedit symon symbol-overlay string-inflection spaceline-all-the-icons smex smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs request rainbow-delimiters pug-mode prettier-js popwin pcre2el password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-cliplink org-bullets org-brain open-junk-file nameless multi-term move-text mmm-mode markdown-toc magit-svn magit-section magit-gitflow macrostep lsp-ui lsp-treemacs lorem-ipsum link-hint ivy-yasnippet ivy-xref ivy-purpose ivy-hydra indent-guide impatient-mode hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-make google-translate golden-ratio gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline diminish devdocs define-word counsel-projectile counsel-css company-web company-statistics company-quickhelp company-lsp column-enforce-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-compile ample-zen-theme all-the-icons-dired aggressive-indent ace-link ac-ispell)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
