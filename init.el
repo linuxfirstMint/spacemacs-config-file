@@ -30,7 +30,7 @@ This function should only modify configuration layer settings."
    ; List of configuration layers to load.
    dotspacemacs-configuration-layers
    ;
-   '(
+   '(haskell
      php
      javascript
      yaml
@@ -89,9 +89,9 @@ This function should only modify configuration layer settings."
                                         :custom
                                         (all-the-icons-scale-factor 1.0))
 
-                                      ;(use-package lsp-haskell
-                                      ;  :location
-                                      ;  (recipe :fetcher github :repo "emacs-lsp/lsp-haskell"))
+                                      (use-package lsp-haskell
+                                        :location
+                                        (recipe :fetcher github :repo "emacs-lsp/lsp-haskell"))
                                       )
 
    ; A list of packages that cannot be updated.
@@ -223,7 +223,6 @@ It should only modify the values of Spacemacs settings."
                                         ;spacemacs-dark
                                         ;spacemacs-light
                         )
-   
    ; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
    ; first three are spaceline themes. `doom' is the doom-emacs mode-line.
@@ -555,32 +554,57 @@ before packages are loaded."
         browse-url-generic-program "/usr/bin/firefox")
 
   ;hie-wrapper使用の設定
-  ;(setq lsp-haskell-process-path-hie "hie-wrapper")
+  (setq lsp-haskell-process-path-hie "hie-wrapper")
   ;(require 'lsp-haskell)
   ;(add-hook 'haskell-mode-hook #'lsp)
 
-  ;(add-to-list 'load-path "~/.emacs.d/elisp/lsp-ui")
-  ;(add-to-list 'load-path "~/.emacs.d/elisp/lsp-haskell")
+  (add-to-list 'load-path "~/.emacs.d/elisp/lsp-ui")
+  (add-to-list 'load-path "~/.emacs.d/elisp/lsp-haskell")
 
-  ;(require 'lsp-mode)
-  ;(use-package lsp-mode
-  ;  :custom
-    ;;general
-  ;  (lsp-mode-flymake 'flymake)
-  ;  :hook
-  ;  (haskell-mode . lsp)
-  ;  (require 'lsp-ui)
-  ;  (use-package lsp-ui
-  ;    :custom
-      ;;general
-  ;    :hook
-  ;    (lsp-mode . lsp-ui-mode)
-  ;    (haskell-mode . lsp-ui-mode)))
-  ;(setq lsp-ui-doc-use-childframe t)
-  ;(add-hook 'lsp-mode-hook 'lsp-ui-mode)
-  ;(add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; ----- lsp ----- ;;
 
-  ;(require 'lsp-haskell)
+  ;;;;;;;;;;;;;;
+  ;; lsp-mode ;;
+  ;;;;;;;;;;;;;;
+  (use-package lsp-mode)
+
+  ;; config
+  (setq lsp-print-io nil)
+  (setq lsp-trace nil)
+  (setq lsp-print-performance nil)
+  (setq lsp-auto-guess-root t)
+  (setq lsp-document-sync-method 'incremental)
+  (setq lsp-response-timeout 5)
+
+  ;; hook
+  ;(add-hook 'go-mode-hook #'lsp)
+  ;(add-hook 'js2-mode-hook #'lsp)
+  ;(add-hook 'web-mode-hook #'lsp)
+  (add-hook 'haskell-mode-hook #'lsp)
+
+  ;; func
+  (defun lsp-mode-init ()
+    (lsp)
+    (global-set-key (kbd "M-*") 'xref-pop-marker-stack)
+    (global-set-key (kbd "M-.") 'xref-find-definitions)
+    (global-set-key (kbd "M-/") 'xref-find-references))
+
+  ;;;;;;;;;;;;;;
+  ;;  lsp-ui  ;;
+  ;;;;;;;;;;;;;;
+  (use-package lsp-ui)
+
+  ;; config
+  (setq lsp-ui-doc-enable t)
+  (setq lsp-ui-doc-header t)
+  (setq lsp-ui-doc-include-signature t)
+  (setq lsp-ui-doc-max-width 150)
+  (setq lsp-ui-doc-max-height 30)
+  (setq lsp-ui-peek-enable t)
+
+  ;; hook
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+
 
   (setq-default tramp-default-method "ssh")
 
@@ -653,6 +677,7 @@ before packages are loaded."
   (add-to-list 'load-path "~/.emacs.d/elisp/Buffer-menu-color")
   (require 'buffer-menu-color)
 
+  
   )
 
 (custom-set-variables
@@ -706,7 +731,7 @@ This function is called at the very end of Spacemacs initialization."
      ("\\?\\?\\?+" . "#dc752f"))))
  '(package-selected-packages
    (quote
-    (git-gutter-fringe+ fringe-helper git-gutter+ flyspell-correct-ivy flyspell-correct browse-at-remote auto-dictionary doom-themes all-the-icons-ivy mozc-popup mozc-im mozc helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-ls-git helm-flx helm-descbinds helm-ag ace-jump-helm-line helm helm-core yasnippet-snippets xterm-color ws-butler writeroom-mode winum which-key wgrep web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-persp treemacs-magit treemacs-evil toc-org terminal-here tagedit symon symbol-overlay string-inflection spaceline-all-the-icons smex smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs request rainbow-delimiters pug-mode prettier-js popwin pcre2el password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-cliplink org-bullets org-brain open-junk-file nameless multi-term move-text mmm-mode markdown-toc magit-svn magit-section magit-gitflow macrostep lsp-ui lsp-treemacs lorem-ipsum link-hint ivy-yasnippet ivy-xref ivy-purpose ivy-hydra indent-guide impatient-mode hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-make google-translate golden-ratio gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline diminish devdocs define-word counsel-projectile counsel-css company-web company-statistics company-quickhelp company-lsp column-enforce-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-compile ample-zen-theme all-the-icons-dired aggressive-indent ace-link ac-ispell)))
+    (evil-easymotion doom-themes all-the-icons-ivy mozc-popup mozc-im mozc helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-ls-git helm-flx helm-descbinds helm-ag ace-jump-helm-line helm helm-core yasnippet-snippets xterm-color ws-butler writeroom-mode winum which-key wgrep web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-persp treemacs-magit treemacs-evil toc-org terminal-here tagedit symon symbol-overlay string-inflection spaceline-all-the-icons smex smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs request rainbow-delimiters pug-mode prettier-js popwin pcre2el password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-cliplink org-bullets org-brain open-junk-file nameless multi-term move-text mmm-mode markdown-toc magit-svn magit-section magit-gitflow macrostep lsp-ui lsp-treemacs lorem-ipsum link-hint ivy-yasnippet ivy-xref ivy-purpose ivy-hydra indent-guide impatient-mode hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-make google-translate golden-ratio gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline diminish devdocs define-word counsel-projectile counsel-css company-web company-statistics company-quickhelp company-lsp column-enforce-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-compile ample-zen-theme all-the-icons-dired aggressive-indent ace-link ac-ispell)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
