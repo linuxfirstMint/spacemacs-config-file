@@ -568,6 +568,7 @@ before packages are loaded."
   (use-package lsp-mode)
 
   ;; config
+  (setq lsp-prefer-flymake nil)
   (setq lsp-print-io nil)
   (setq lsp-trace nil)
   (setq lsp-print-performance nil)
@@ -584,9 +585,11 @@ before packages are loaded."
   ;; func
   (defun lsp-mode-init ()
     (lsp)
-    (global-set-key (kbd "M-*") 'xref-pop-marker-stack)
-    (global-set-key (kbd "M-.") 'xref-find-definitions)
-    (global-set-key (kbd "M-/") 'xref-find-references))
+    (bind-key* "M-*" 'xref-pop-marker-stack) ;ジャンプ元に戻る
+    (bind-key* "M-[" 'xref-find-definitions) ;定義ジャンプ
+    (bind-key* "M-]" 'xref-find-references)) ;参照ジャンプ
+
+  (add-hook 'haskell-mode-hook 'lsp-mode-init)
 
   ;;;;;;;;;;;;;;
   ;;  lsp-ui  ;;
@@ -594,12 +597,16 @@ before packages are loaded."
   (use-package lsp-ui)
 
   ;; config
+  (setq lsp-ui-flycheck t)
   (setq lsp-ui-doc-enable t)
   (setq lsp-ui-doc-header t)
   (setq lsp-ui-doc-include-signature t)
   (setq lsp-ui-doc-max-width 150)
   (setq lsp-ui-doc-max-height 30)
   (setq lsp-ui-peek-enable t)
+  (setq lsp-ui-peek-peek-height 20)
+  (setq lsp-ui-peek-list-width 50)
+  (setq lsp-ui-peek-fontify 'on-demand) ;; never, on-demand, or always
 
   ;; hook
   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
@@ -700,6 +707,13 @@ before packages are loaded."
      ;yatex-mode-hook
      org-mode
      ))
+
+  ;window-resize
+  (bind-key "M-h" 'shrink-window-horizontally)
+  (bind-key "M-j" 'shrink-window)
+  (bind-key "M-k" 'enlarge-window)
+  (bind-key "M-l" 'enlarge-window-horizontally)
+
 
   )
 
